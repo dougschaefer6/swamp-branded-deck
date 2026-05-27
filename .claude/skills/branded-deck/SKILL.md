@@ -60,10 +60,14 @@ brand tokens.
    `@page { size: 1280px 720px; margin: 0 }`); sparse on-slide text; **no em
    dashes**; scan the copy against the `killList` before running. A row of four
    cards must be a 2x2 grid — a single row of four overflows 1280px.
+   **Only `.slide` is fixed-height.** Tell the model that `html` and `body` must
+   NOT set a viewport height (`100vh` or `height: 720px`) or `overflow: hidden`;
+   those clamp the document to one screen and collapse the whole deck into a
+   single PDF page. The page must grow to contain every slide.
 
 5. **Run the workflow.**
    ```bash
-   swamp workflow run compose-branded-deck --input '{
+   swamp workflow run @dougschaefer/compose-branded-deck --input '{
      "brief": "<the slide brief>",
      "references": ["https://swamp.club"],
      "styleNotes": "<hex palette + fonts + motifs>",
@@ -74,8 +78,11 @@ brand tokens.
    `SWAMP_OUTPUT_COPY_DIR` to also drop copies somewhere handy (e.g. a Downloads
    folder).
 
-6. **Review the render.** Convert a couple of PDF pages to PNG and inspect for
-   overflow and legibility, then iterate the brief if needed:
+6. **Review the render.** First confirm the PDF page count equals the slide
+   count (`identify "<deck>.pdf" | wc -l`). If it is **1 page**, the model
+   clamped `html`/`body` height or set `overflow: hidden` — strip those rules
+   from the generated HTML and re-render. Then convert a couple of pages to PNG
+   and inspect for overflow and legibility, iterating the brief if needed:
    ```bash
    convert -density 96 "<deck>.pdf[2]" /tmp/slide3.png
    ```

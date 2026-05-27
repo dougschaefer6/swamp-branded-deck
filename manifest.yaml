@@ -1,6 +1,6 @@
 manifestVersion: 1
 name: "@dougschaefer/branded-deck"
-version: "2026.05.27.1"
+version: "2026.05.27.2"
 description: "On-brand slide deck pipeline for swamp: a workflow that renders a deck from a voiced brief and a design reference via openai-document.webpageDesign, plus a skill that guides authoring the copy in your writing-voice profile, pinning brand tokens, and converting the PDF to PPTX. Depends on the openai-document, writing-voice, and openai-image extensions."
 repository: https://github.com/dougschaefer6/swamp-branded-deck
 additionalFiles:
