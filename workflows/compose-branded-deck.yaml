@@ -1,0 +1,68 @@
+id: cec3436d-e8fb-45e4-90de-85e447bef607
+name: "@dougschaefer/compose-branded-deck"
+description: >-
+  Render an on-brand slide deck from a voiced brief plus a design reference, via
+  @dougschaefer/openai-document.webpageDesign (GPT vision matches the reference
+  and a headless browser renders the deck to HTML + PDF + PNG). Pair it with the
+  branded-deck skill, which covers authoring the slide copy in a writing-voice
+  profile, choosing the reference and style tokens, and the optional PDF->PPTX
+  conversion. Requires a doc-processor instance (type
+  @dougschaefer/openai-document) with its OpenAI key in the vault.
+tags: {}
+inputs:
+  properties:
+    brief:
+      type: string
+      description: >-
+        Slide-by-slide content authored in the writing-voice profile (verbatim
+        copy plus layout directives). Keep on-slide text sparse.
+    references:
+      type: array
+      items:
+        type: string
+      minItems: 1
+      description: >-
+        Design reference(s): a page URL (rasterized automatically) or local
+        image path(s). Visual style only.
+    styleNotes:
+      type: string
+      default: ""
+      description: >-
+        Explicit brand tokens (hex palette, fonts, motifs) to pin the design
+        beyond what vision infers.
+    outputName:
+      type: string
+      default: branded-deck
+      description: Base name for the generated HTML/PDF/PNG artifacts.
+    model:
+      type: string
+      default: gpt-4.1
+      description: OpenAI vision model for the design pass.
+  required:
+    - brief
+    - references
+jobs:
+  - name: build
+    description: Vision-match the reference and render the deck.
+    steps:
+      - name: design-deck
+        description: >-
+          openai-document webpageDesign: vision-match the reference design and
+          render the deck to HTML + PDF + PNG.
+        task:
+          type: model_method
+          modelIdOrName: doc-processor
+          methodName: webpageDesign
+          inputs:
+            brief: ${{ inputs.brief }}
+            references: ${{ inputs.references }}
+            styleNotes: ${{ inputs.styleNotes }}
+            responsive: false
+            renderPreview: true
+            model: ${{ inputs.model }}
+            outputName: ${{ inputs.outputName }}
+        dependsOn: []
+        weight: 0
+    dependsOn: []
+    weight: 0
+version: 1
