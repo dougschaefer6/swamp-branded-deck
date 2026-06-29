@@ -1,5 +1,6 @@
 ---
 name: branded-deck
+owner: asei
 description: >-
   Produce an on-brand slide deck that matches a reference design and sounds like
   the writing-voice profile, via the compose-branded-deck workflow. Use when
@@ -88,11 +89,12 @@ brand tokens.
    ```
 
 7. **Optional: convert to PPTX.** Turn the rendered PDF into a 16:9 PPTX (one
-   page per slide) for PowerPoint or Google Slides. This repo ships a one-shot
-   wrapper; the equivalent inline needs only ImageMagick + python-pptx:
+   page per slide) for PowerPoint or Google Slides. The portable path below needs
+   only ImageMagick + python-pptx and works wherever the extension is pulled. (The
+   catalog repo also ships a `deck-pdf-to-pptx.sh` wrapper for convenience, but it
+   is not bundled with the pulled extension — use the inline form below.)
    ```bash
-   bash scripts/deck-pdf-to-pptx.sh .swamp/generated-documents/<deck>-<ts>.pdf
-   # or inline, anywhere ImageMagick + python-pptx are installed:
+   # inline, anywhere ImageMagick + python-pptx are installed:
    convert -density 150 -background black <deck>.pdf -alpha remove /tmp/s.png
    python3 - <<'PY'
    import glob, os
